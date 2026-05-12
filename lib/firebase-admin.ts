@@ -11,12 +11,3 @@ if (!admin.apps.length) {
 }
 
 export const adminDb = admin.firestore();
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
-  });
-}
-
-const db = admin.firestore();
-
-export { db };
