@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "@/lib/firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
@@ -12,26 +11,10 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSignup = async () => {
+  const signup = async () => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-
-      const user = userCredential.user;
-
-      await setDoc(doc(db, "users", user.uid), {
-        email: user.email,
-        balance: 0,
-        surveysCompleted: 0,
-        referralEarnings: 0,
-        createdAt: new Date(),
-      });
-
-      alert("Account Created Successfully!");
-
+      await createUserWithEmailAndPassword(auth, email, password);
+      alert("Signup successful");
       router.push("/dashboard");
     } catch (error: any) {
       alert(error.message);
@@ -39,38 +22,31 @@ export default function SignupPage() {
   };
 
   return (
-    <main className="min-h-screen bg-black flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-3xl p-8 shadow-2xl">
-        
-        <h1 className="text-4xl font-bold text-green-400 mb-2">
-          Join Now
+    <main className="min-h-screen bg-black flex items-center justify-center">
+      <div className="bg-zinc-900 p-8 rounded-xl w-[350px]">
+        <h1 className="text-3xl text-green-400 font-bold mb-6">
+          Signup
         </h1>
-
-        <p className="text-zinc-400 mb-6">
-          Create your OpinionCashout account
-        </p>
 
         <input
           type="email"
-          placeholder="Enter your email"
-          value={email}
+          placeholder="Email"
+          className="w-full p-3 mb-4 rounded bg-black text-white border border-zinc-700"
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full h-12 px-4 rounded-xl bg-black border border-zinc-700 text-white outline-none mb-4"
         />
 
         <input
           type="password"
-          placeholder="Enter your password"
-          value={password}
+          placeholder="Password"
+          className="w-full p-3 mb-4 rounded bg-black text-white border border-zinc-700"
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full h-12 px-4 rounded-xl bg-black border border-zinc-700 text-white outline-none mb-6"
         />
 
         <button
-          onClick={handleSignup}
-          className="w-full h-12 rounded-xl bg-green-500 hover:bg-green-400 transition text-black font-bold"
+          onClick={signup}
+          className="w-full bg-green-500 text-black py-3 rounded font-bold"
         >
-          Create Account
+          Signup
         </button>
       </div>
     </main>
